@@ -5,42 +5,52 @@
     <meta charset="utf-8">
     <title>Test</title>
     <style>
-        body {
-            background: #eee;
-            margin: 0px;
-        }
-
         * {
             margin: 0px;
         }
 
+        html,
+        body,
         #canvas {
-            border: 5px solid;
-            margin: 0;
-            padding: 0;
-            /* background: #fff;
-            margin: 10px 15px 20px 25px;
-            border-style: solid;
-            border-width: 25px 35px 20px 30px;
-            border-color: gray;
-            padding-top: 10px;
-            padding-right: 0.25em;
-            padding-bottom: 2ex;
-            padding-left: 20%;
-            box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
-            -webkit-box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
-            -moz-box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);*/
+            width: 100%;
+            height: 100%;
+        }
 
+        #fps {
+            position: absolute;
+            /* width: 50px;*/
+            height: 30px;
+            left: 0;
+            top: 0;
+            background-color: bisque;
+            border: 2px solid black;
+        }
+
+        #fps p:first-child {
+            position: relative;
+            display: inline-block;
+            font-size: 10px;
+            font-style: oblique;
+        }
+
+        #fps p:last-child {
+            display: inline-flex;
+            position: relative;
+            top: 2px;
+            right: 0;
+            font-size: 15px;
+            font-style: normal;
         }
     </style>
 
 </head>
 
 <body>
+    <div id="fps">
+        <p>Fps:</p>
+        <p id="number">30000000</p>
+    </div>
     <canvas id="canvas" width="500" height="500"></canvas>
-    <button id="change">Change State</button>
-    <button id="start">Start</button>
-    <button id="stop">Stop</button>
     <script src="./dist/index-bundle.js"></script>
 </body>
 

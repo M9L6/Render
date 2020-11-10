@@ -12,8 +12,12 @@ import { Scale9Dta } from "../shapes/Scale9Data";
 import { Scale9Grid } from "../shapes/Scale9Grid";
 import { Bone } from "../shapes/Bone";
 import { BezierPath } from "../shapes/BezierPath";
+import { EndClipShape } from "../shapes/EndClipShape";
+import { ERenderType } from "../objects/IRenderState";
 
 export class SpriteFactory {
+    public static endClipShape: IShape = new EndClipShape();
+
     public static createSprite(shape: IShape, name: string = ""): ISprite {
         let spr: ISprite = new Sprite2D(shape, name);
         return spr;
@@ -82,5 +86,11 @@ export class SpriteFactory {
         isCubic: boolean = false
     ): IShape {
         return new BezierPath(points, isCubic);
+    }
+
+    public static createClipSprite(name: string = ""): ISprite {
+        let spr = new Sprite2D(SpriteFactory.endClipShape, name);
+        spr.renderType = ERenderType.CLIP;
+        return spr;
     }
 }

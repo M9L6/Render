@@ -86,7 +86,7 @@ export abstract class BaseShape2D implements IShape {
                 this.drawLine(context, this.axisXStyle, true);
                 this.drawLine(context, this.axisYStyle, false);
             }
+            context.restore();
         }
-        context.restore();
     }
 }

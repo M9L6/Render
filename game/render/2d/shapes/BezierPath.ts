@@ -30,7 +30,7 @@ export class BezierPath extends BaseShape2D {
         context.beginPath();
         context.moveTo(this.points[0].x, this.points[0].y);
         if (this.isCubic) {
-            for (let i = 0; i < this.points.length; i += 3) {
+            for (let i = 1; i < this.points.length; i += 3) {
                 context.bezierCurveTo(
                     this.points[i].x,
                     this.points[i].y,
@@ -41,7 +41,7 @@ export class BezierPath extends BaseShape2D {
                 );
             }
         } else {
-            for (let i = 0; i < this.points.length; i += 2) {
+            for (let i = 1; i < this.points.length; i += 2) {
                 context.quadraticCurveTo(
                     this.points[i].x,
                     this.points[i].y,

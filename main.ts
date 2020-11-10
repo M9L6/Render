@@ -2,6 +2,7 @@ import { Sprite2DApplication } from "./game/Sprite2DApplication";
 import { ApplicationTest } from "./test/ApplicationTest";
 import { Shape_Hit_Draw_TestDemo } from "./test/Shape_Hit_Draw_TestDemo";
 import { SkeletonPersonTets } from "./test/SkeletonPersonTest";
+import { TankFollowBezierPathDemo } from "./test/TankFollowBezierPathDemo";
 import { TestCanvas2dApplication } from "./test/TestCanvas2dApplication";
 
 /*function timerCallback(id: number, data: string): void {
@@ -12,8 +13,26 @@ let canvas: HTMLCanvasElement | null = document.getElementById(
     "canvas"
 ) as HTMLCanvasElement;
 
+function resize() {
+    canvas!.width = window.innerWidth;
+    canvas!.height = window.innerHeight;
+}
+resize();
+window.addEventListener("resize", resize);
+
+let fpsNumber: HTMLElement | null = document.getElementById("number");
 let app: Sprite2DApplication = new Sprite2DApplication(canvas);
-new SkeletonPersonTets(app);
+
+app.addTimer(
+    () => {
+        fpsNumber!.innerText = app.fps.toFixed(1);
+    },
+    0,
+    false
+);
+
+new TankFollowBezierPathDemo(app);
+//new SkeletonPersonTets(app);
 
 //new Shape_Hit_Draw_TestDemo(app);
 

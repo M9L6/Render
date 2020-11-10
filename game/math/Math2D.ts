@@ -213,7 +213,7 @@ export class Math2D {
         return t2 * start + 2.0 * t * t1 * ctrl + t * t * end;
     }
 
-    public static getQyadraticBezierVector(
+    public static getQuadraticBezierVector(
         start: Vec2,
         ctrl: Vec2,
         end: Vec2,
