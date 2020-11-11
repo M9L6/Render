@@ -1,5 +1,6 @@
 import { Sprite2DApplication } from "./game/Sprite2DApplication";
 import { ApplicationTest } from "./test/ApplicationTest";
+import { BasicWebGLApplication } from "./test/BasicWebGLApplication";
 import { Shape_Hit_Draw_TestDemo } from "./test/Shape_Hit_Draw_TestDemo";
 import { SkeletonPersonTets } from "./test/SkeletonPersonTest";
 import { TankFollowBezierPathDemo } from "./test/TankFollowBezierPathDemo";
@@ -21,7 +22,9 @@ resize();
 window.addEventListener("resize", resize);
 
 let fpsNumber: HTMLElement | null = document.getElementById("number");
-let app: Sprite2DApplication = new Sprite2DApplication(canvas);
+let app: BasicWebGLApplication = new BasicWebGLApplication(canvas);
+
+//let app:Sprite2DApplication = new Sprite2DApplication(canvas);
 
 app.addTimer(
     () => {
@@ -31,7 +34,7 @@ app.addTimer(
     false
 );
 
-new TankFollowBezierPathDemo(app);
+//new TankFollowBezierPathDemo(app);
 //new SkeletonPersonTets(app);
 
 //new Shape_Hit_Draw_TestDemo(app);

@@ -26,9 +26,9 @@ export class Application implements EventListenerObject {
         this.canvas.addEventListener("mousedown", this, false);
         this.canvas.addEventListener("mouseup", this, false);
         this.canvas.addEventListener("mousemove", this, false);
-        this.canvas.oncontextmenu = () => {
+        /* this.canvas.oncontextmenu = () => {
             return false;
-        };
+        };*/
         window.addEventListener("keydown", this, false);
         window.addEventListener("keyup", this, false);
         window.addEventListener("keypress", this, false);
