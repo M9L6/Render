@@ -1,8 +1,6 @@
 import { Application } from "../game/Application";
 import { TypedArrayList } from "../game/dataStruct/TypedArrayList";
-import { EShaderType, GLHelper } from "../game/helper/GLHelper";
-import { CanvasMouseEvent } from "../game/input/CanvasMouseEvent";
-import { Math2D } from "../game/math/Math2D";
+import { EShaderType, GLHelper } from "../game/render/gl/core/helper/GLHelper";
 import mat4 from "../game/math/tsm/mat4";
 import vec3 from "../game/math/tsm/vec3";
 import vec4 from "../game/math/tsm/vec4";

@@ -297,25 +297,29 @@ export default class mat4 {
         return this;
     }
 
-    multiplyVec3(vector: vec3): vec3 {
+    multiplyVec3(vector: vec3, dest?: vec3): vec3 {
+        if (!dest) dest = new vec3();
         const x = vector.x;
         const y = vector.y;
         const z = vector.z;
 
-        return new vec3([
+        dest.x =
             this.values[0] * x +
-                this.values[4] * y +
-                this.values[8] * z +
-                this.values[12],
+            this.values[4] * y +
+            this.values[8] * z +
+            this.values[12];
+        dest.y =
             this.values[1] * x +
-                this.values[5] * y +
-                this.values[9] * z +
-                this.values[13],
+            this.values[5] * y +
+            this.values[9] * z +
+            this.values[13];
+        dest.z =
             this.values[2] * x +
-                this.values[6] * y +
-                this.values[10] * z +
-                this.values[14],
-        ]);
+            this.values[6] * y +
+            this.values[10] * z +
+            this.values[14];
+
+        return dest;
     }
 
     multiplyVec4(vector: vec4, dest?: vec4): vec4 {

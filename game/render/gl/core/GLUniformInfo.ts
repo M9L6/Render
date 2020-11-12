@@ -1,4 +1,4 @@
-import { EGLSLESDataType } from "../../helper/GLHelper";
+import { EGLSLESDataType } from "./helper/GLHelper";
 
 export class GLUniformInfo {
     public size: number;

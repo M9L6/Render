@@ -1,5 +1,8 @@
-import { GLAttribInfo } from "../render/gl/GLAttribInfo";
-import { GLUniformInfo } from "../render/gl/GLUniformInfo";
+import { GLAttribInfo } from "../GLAttribInfo";
+import { GLUniformInfo } from "../GLUniformInfo";
+
+export type GLAttribMap = { [key: string]: GLAttribInfo };
+export type GLUniformMap = { [key: string]: GLUniformInfo };
 
 export enum EShaderType {
     VS_SHADER,
@@ -60,6 +63,34 @@ export class GLHelper {
         vendor = ${gl.getParameter(gl.VENDOR)}
         glsl version = ${gl.getParameter(gl.SHADING_LANGUAGE_VERSION)}
         `);
+    }
+
+    public static checkGLError(gl: WebGLRenderingContext): void {
+        let error: number = gl.getError();
+        switch (error) {
+            case gl.INVALID_ENUM:
+                throw new Error(
+                    "An unacceptable value has been specified for an enumerated argument. The command is ignored and the error flag is set"
+                );
+            case gl.INVALID_OPERATION:
+                throw new Error(
+                    "The specified command is not allowed for the current state. The command is ignored and the error flag is set."
+                );
+            case gl.INVALID_VALUE:
+                throw new Error(
+                    "A numeric argument is out of range. The command is ignored and the error flag is set."
+                );
+            case gl.INVALID_FRAMEBUFFER_OPERATION:
+                throw new Error("use invalid framebuffer operation");
+            case gl.OUT_OF_MEMORY:
+                throw new Error(
+                    "Not enough memory is left to execute the command."
+                );
+            case gl.CONTEXT_LOST_WEBGL:
+                throw new Error(
+                    "If the WebGL context is lost, this error is returned on the first call to getError. Afterwards and until the context has been restored, it returns gl.NO_ERROR."
+                );
+        }
     }
 
     public static createShader(
@@ -133,7 +164,7 @@ export class GLHelper {
     public static getProgramActiveAttribs(
         gl: WebGLRenderingContext,
         program: WebGLProgram,
-        out: any
+        out: GLAttribMap
     ): void {
         let attributesCount: number = gl.getProgramParameter(
             program,
@@ -154,7 +185,7 @@ export class GLHelper {
     public static getProgramActiveUniforms(
         gl: WebGLRenderingContext,
         program: WebGLProgram,
-        out: any
+        out: GLUniformMap
     ): void {
         let uniformCount: number = gl.getProgramParameter(
             program,

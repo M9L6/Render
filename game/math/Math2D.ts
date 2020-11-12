@@ -1,5 +1,6 @@
 import { Mat2D } from "./Mat2D";
 import { MatrixStack } from "./MatrixStack";
+import vec3 from "./tsm/vec3";
 import { Vec2 } from "./Vec2";
 
 export class Math2D {
@@ -8,14 +9,17 @@ export class Math2D {
         "black",
         "blue",
         "fuchsia",
+
         "gray",
         "green",
         "lime",
         "maroon",
+
         "navy",
         "olive",
         "orange",
         "purple",
+
         "red",
         "silver",
         "teal",
@@ -280,5 +284,21 @@ export class Math2D {
             t
         );
         return result;
+    }
+
+    public static computeNormal(
+        a: vec3,
+        b: vec3,
+        c: vec3,
+        normal: vec3 | null
+    ): vec3 {
+        if (!normal) normal = new vec3();
+        let l0: vec3 = new vec3(),
+            l1: vec3 = new vec3();
+        vec3.difference(b, a, l0);
+        vec3.difference(c, a, l1);
+        vec3.cross(l0, l1, normal);
+        normal.normalize();
+        return normal;
     }
 }
