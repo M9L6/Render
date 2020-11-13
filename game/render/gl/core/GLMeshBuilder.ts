@@ -130,7 +130,12 @@ export class GLMeshBuilder extends GLMeshBase {
         this.unbind();
     }
 
-    public color(r: number, g: number, b: number, a: number): GLMeshBuilder {
+    public color(
+        r: number,
+        g: number,
+        b: number,
+        a: number = 1
+    ): GLMeshBuilder {
         if (this._hasColor) {
             this._color.r = r;
             this._color.g = g;

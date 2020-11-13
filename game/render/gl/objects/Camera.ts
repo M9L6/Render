@@ -98,6 +98,22 @@ export class Camera {
         this._type = v;
     }
 
+    public get viewMatrix(): mat4 {
+        return this._viewMatrix;
+    }
+
+    public get projMatrix(): mat4 {
+        return this._projectionMatirx;
+    }
+
+    public get viewProjMatrix(): mat4 {
+        return this._viewProjnMatrix;
+    }
+
+    public get invViewProjMatrix(): mat4 {
+        return this._invViewProjMatrix;
+    }
+
     constructor(
         gl: WebGLRenderingContext,
         width: number,

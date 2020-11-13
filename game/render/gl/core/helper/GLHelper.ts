@@ -117,7 +117,7 @@ export class GLHelper {
         gl.shaderSource(shader, code);
         gl.compileShader(shader);
         if (gl.getShaderParameter(shader, gl.COMPILE_STATUS) === false) {
-            alert(gl.getShaderInfoLog(shader));
+            console.log(gl.getShaderInfoLog(shader));
             gl.deleteShader(shader);
             return false;
         }
@@ -149,7 +149,7 @@ export class GLHelper {
         if (beforeProgramLink !== null) beforeProgramLink(gl, program);
         gl.linkProgram(program);
         if (gl.getProgramParameter(program, gl.LINK_STATUS) === false) {
-            alert(gl.getProgramInfoLog(program));
+            console.log(gl.getProgramInfoLog(program));
             gl.detachShader(program, vsShader);
             gl.detachShader(program, fsShader);
             gl.deleteShader(vsShader);

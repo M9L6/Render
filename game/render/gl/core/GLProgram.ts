@@ -11,11 +11,11 @@ export const GLShaderSource = {
     colorShader: {
         vs: `
         #ifdef GL_ES
-            precision highp float
+            precision highp float;
         #endif
         attribute vec3 aPosition;
         attribute vec4 aColor;
-        uniform vec4 uMVPMatrix;
+        uniform mat4 uMVPMatrix;
         varying vec4 vColor;
         void main(){
             gl_Position = uMVPMatrix*vec4(aPosition,1.0);
@@ -24,7 +24,7 @@ export const GLShaderSource = {
         `,
         fs: `
         #ifdef GL_ES
-            precision highp float
+            precision highp float;
         #endif
         varying vec4 vColor;
         void main(){
@@ -35,11 +35,11 @@ export const GLShaderSource = {
     textureShader: {
         vs: `
         #ifdef GL_ES
-            precision highp float
+            precision highp float;
         #endif
         attribute vec3 aPosition;
         attribute vec2 aTexCoord;
-        uniform vec4 uMVPMatrix;
+        uniform mat4 uMVPMatrix;
         varying vec2 vTexCoord;
         void main(){
             gl_Position = uMVPMatrix*vec4(aPosition,1.0);
@@ -48,7 +48,7 @@ export const GLShaderSource = {
         `,
         fs: `
         #ifdef GL_ES
-            precision highp float
+            precision highp float;
         #endif
         uniform sampler2D uSampler;
         varying vec2 vTexCoord;
@@ -209,10 +209,10 @@ export class GLProgram {
     }
 
     public loadShaders(vs: string, fs: string): void {
-        if (GLHelper.compileShader(this.gl, vs, this.vsShader)) {
+        if (GLHelper.compileShader(this.gl, vs, this.vsShader) === false) {
             throw new Error("WEBGL Vertex Shader Compile Fail");
         }
-        if (GLHelper.compileShader(this.gl, fs, this.fsShader)) {
+        if (GLHelper.compileShader(this.gl, fs, this.fsShader) === false) {
             throw new Error("WEBGL Fragment Shader Compile Fail");
         }
 
@@ -226,6 +226,7 @@ export class GLProgram {
                 this.programAfterLink.bind(this)
             ) === false
         ) {
+            console.log(this.gl.getProgramInfoLog(this.program));
             throw new Error("WEBGLProgram Link Fail");
         }
     }

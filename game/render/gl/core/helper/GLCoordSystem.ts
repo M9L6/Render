@@ -1,6 +1,23 @@
 import vec3 from "../../../../math/tsm/vec3";
 
 export class GLCoordSystem {
+    public static makeViewportCoordSystems(
+        width: number,
+        height: number,
+        row: number = 2,
+        col: number = 2
+    ): GLCoordSystem[] {
+        let coords: GLCoordSystem[] = [];
+        let w: number = width / row,
+            h: number = height / col;
+        for (let i = 0; i < row; i++) {
+            for (let j = 0; j < col; j++) {
+                coords.push(new GLCoordSystem([i * w, +j * h, w, h]));
+            }
+        }
+        return coords;
+    }
+
     public viewport: number[] = [];
     public axis: vec3;
     public angle: number;
