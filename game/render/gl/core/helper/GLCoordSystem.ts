@@ -12,7 +12,7 @@ export class GLCoordSystem {
             h: number = height / col;
         for (let i = 0; i < row; i++) {
             for (let j = 0; j < col; j++) {
-                coords.push(new GLCoordSystem([i * w, +j * h, w, h]));
+                coords.push(new GLCoordSystem([i * w, j * h, w, h]));
             }
         }
         return coords;

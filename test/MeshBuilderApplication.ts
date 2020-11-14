@@ -1,4 +1,5 @@
 import { CamerApplication } from "../game/CameraApplication";
+import { CanvasKeyBoardEvent } from "../game/input/CanvasKeyBoardEvent";
 import mat4 from "../game/math/tsm/mat4";
 import vec3 from "../game/math/tsm/vec3";
 import { GLAttribState } from "../game/render/gl/core/GLAttribState";
@@ -21,7 +22,7 @@ export class MeshBuilderApplication extends CamerApplication {
         gl.clearDepth(1.0);
         gl.enable(gl.DEPTH_TEST);
         gl.enable(gl.CULL_FACE);
-        gl.enable(gl.SCISSOR_TEST);
+        // gl.enable(gl.SCISSOR_TEST);
     }
 
     public texture: GLTexture;
@@ -89,7 +90,7 @@ export class MeshBuilderApplication extends CamerApplication {
             EVertexLayout.SEPARATED
         );
 
-        this.camera.z = 4;
+        this.camera.z = 8;
 
         this.coords = GLCoordSystem.makeViewportCoordSystems(
             canvas.width,
@@ -97,7 +98,17 @@ export class MeshBuilderApplication extends CamerApplication {
             2,
             3
         );
-        this.currentDrawMethod = this.drawByMatrixWithColorShader;
+        this.currentDrawMethod = this.drawByMultiViewportsWithTextureShader; //this.drawByMatrixWithColorShader;
+        MeshBuilderApplication.setDefaultState(this.gl);
+    }
+
+    private setViewport(coord: GLCoordSystem): void {
+        this.camera.setViewport(
+            coord.viewport[0],
+            coord.viewport[1],
+            coord.viewport[2],
+            coord.viewport[3]
+        );
     }
 
     public drawByMatrixWithColorShader(): void {
@@ -153,6 +164,153 @@ export class MeshBuilderApplication extends CamerApplication {
         this.gl.enable(this.gl.CULL_FACE);
     }
 
+    private _cubeTexCoords: number[] = [
+        0,
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        1,
+        0,
+        1,
+        0.5,
+        0.5,
+        1,
+        0.5,
+        1,
+        1,
+        0.5,
+        1,
+        0,
+        0,
+        0.5,
+        0,
+        0.5,
+        0.5,
+        0,
+        0.5,
+        0.5,
+        0,
+        1,
+        0,
+        1,
+        0.5,
+        0.5,
+        0.5,
+        0.25,
+        0.25,
+        0.75,
+        0.25,
+        0.75,
+        0.75,
+        0.25,
+        0.75,
+        0,
+        0,
+        1,
+        0,
+        1,
+        1,
+        0,
+        1,
+    ];
+
+    public drawByMultiViewportsWithTextureShader(): void {
+        this.setViewport(this.coords[0]);
+        this.gl.clearColor(1, 0, 0, 1);
+        this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+
+        this.matStack.pushMatrix();
+        this.matStack.rotate(this.angle, vec3.up);
+        mat4.product(
+            this.camera.viewProjMatrix,
+            this.matStack.worldMatrix,
+            mat
+        );
+        DrawHelper.drawTextureCube(
+            this.tbuilder0,
+            mat,
+            0.5,
+            this._cubeTexCoords
+        );
+        this.matStack.popMatrix();
+
+        this.setViewport(this.coords[1]);
+
+        this.matStack.pushMatrix();
+        this.matStack.rotate(this.angle, vec3.right);
+        mat4.product(
+            this.camera.viewProjMatrix,
+            this.matStack.worldMatrix,
+            mat
+        );
+        DrawHelper.drawTextureCube(
+            this.tbuilder1,
+            mat,
+            0.5,
+            this._cubeTexCoords
+        );
+        this.matStack.popMatrix();
+
+        this.setViewport(this.coords[2]);
+
+        this.matStack.pushMatrix();
+        this.matStack.rotate(this.angle, vec3.forward);
+        mat4.product(
+            this.camera.viewProjMatrix,
+            this.matStack.worldMatrix,
+            mat
+        );
+        DrawHelper.drawTextureCube(
+            this.tbuilder2,
+            mat,
+            0.5,
+            this._cubeTexCoords
+        );
+        this.matStack.popMatrix();
+
+        this.setViewport(this.coords[3]);
+
+        this.matStack.pushMatrix();
+        this.matStack.rotate(this.angle, new vec3([1, 1, 1]).normalize());
+        mat4.product(
+            this.camera.viewProjMatrix,
+            this.matStack.worldMatrix,
+            mat
+        );
+        DrawHelper.drawTextureCube(
+            this.tbuilder0,
+            mat,
+            0.8,
+            this._cubeTexCoords
+        );
+        this.matStack.popMatrix();
+
+        this.setViewport(this.coords[4]);
+
+        this.matStack.pushMatrix();
+        this.matStack.rotate(-this.angle, vec3.right);
+        mat4.product(
+            this.camera.viewProjMatrix,
+            this.matStack.worldMatrix,
+            mat
+        );
+        DrawHelper.drawTextureCube(this.tbuilder1, mat, 0.5);
+        this.matStack.popMatrix();
+
+        this.setViewport(this.coords[5]);
+
+        this.matStack.pushMatrix();
+        this.matStack.rotate(-this.angle, vec3.up);
+        mat4.product(
+            this.camera.viewProjMatrix,
+            this.matStack.worldMatrix,
+            mat
+        );
+        DrawHelper.drawTextureCube(this.tbuilder2, mat, 0.6);
+        this.matStack.popMatrix();
+    }
+
     public update(elapsedMsec: number, intervalSec: number): void {
         this.angle += 1;
         super.update(elapsedMsec, intervalSec);
@@ -160,5 +318,14 @@ export class MeshBuilderApplication extends CamerApplication {
 
     public render(): void {
         this.currentDrawMethod();
+    }
+
+    public onKeyPress(evt: CanvasKeyBoardEvent): void {
+        super.onKeyPress(evt);
+        if (evt.key === "1") {
+            this.currentDrawMethod = this.drawByMatrixWithColorShader;
+        } else if (evt.key === "2") {
+            this.currentDrawMethod = this.drawByMultiViewportsWithTextureShader;
+        }
     }
 }

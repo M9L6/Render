@@ -65,6 +65,7 @@ export class GLTexture {
         }
         let tex: GLTexture = new GLTexture(gl);
         tex.wrap();
+        tex.filter();
         tex.upload(canvas);
         return tex;
     }

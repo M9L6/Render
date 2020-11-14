@@ -8,6 +8,7 @@ export class GLTextureCache {
 
     private constructor() {
         this._dict = new Dictionary<GLTexture>();
+        console.log("create texture cache");
     }
 
     public set(key: string, value: GLTexture): void {

@@ -14,7 +14,7 @@ import { TestCanvas2dApplication } from "./test/TestCanvas2dApplication";
 let canvas: HTMLCanvasElement | null = document.getElementById(
     "canvas"
 ) as HTMLCanvasElement;
-
+let app: MeshBuilderApplication;
 function resize() {
     canvas!.width = window.innerWidth;
     canvas!.height = window.innerHeight;
@@ -23,7 +23,7 @@ resize();
 window.addEventListener("resize", resize);
 
 let fpsNumber: HTMLElement | null = document.getElementById("number");
-let app: MeshBuilderApplication = new MeshBuilderApplication(canvas);
+app = new MeshBuilderApplication(canvas);
 app.start();
 //let app: BasicWebGLApplication = new BasicWebGLApplication(canvas);
 //let app:Sprite2DApplication = new Sprite2DApplication(canvas);

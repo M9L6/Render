@@ -10,6 +10,7 @@ import {
 } from "./GLAttribState";
 import { GLMeshBase } from "./GLMeshBase";
 import { GLProgram } from "./GLProgram";
+import { GLTexture } from "./GLTexture";
 
 export enum EVertexLayout {
     INTERLEAVED,
@@ -33,13 +34,13 @@ export class GLMeshBuilder extends GLMeshBase {
     private _buffers: { [key: string]: WebGLBuffer } = {};
     private _vertCount: number = 0;
     public program: GLProgram;
-    public texture: WebGLTexture | null;
+    public texture: GLTexture | null;
 
     constructor(
         gl: WebGLRenderingContext,
         state: GLAttribBits,
         program: GLProgram,
-        texture: WebGLTexture | null = null,
+        texture: GLTexture | null = null,
         layout: EVertexLayout = EVertexLayout.INTERLEAVED
     ) {
         super(gl, state);
@@ -64,8 +65,8 @@ export class GLMeshBuilder extends GLMeshBase {
             let map: GLAttribOffsetMap = GLAttribState.getInterleavedLayoutAttribOffsetMap(
                 this._attribState
             );
-            GLAttribState.setAttribVertexArrayPointer(this.gl, map);
             GLAttribState.setAttribVertexArrayState(this.gl, this._attribState);
+            GLAttribState.setAttribVertexArrayPointer(this.gl, map);
         } else if (this._layout === EVertexLayout.SEQUENCED) {
             this._lists[GLAttribState.POSITION_NAME] = new TypedArrayList<
                 Float32Array
@@ -124,8 +125,6 @@ export class GLMeshBuilder extends GLMeshBase {
             let map: GLAttribOffsetMap = GLAttribState.getSepratedLayoutAttribOffsetMap(
                 this._attribState
             );
-            GLAttribState.setAttribVertexArrayPointer(this.gl, map);
-            GLAttribState.setAttribVertexArrayState(this.gl, this._attribState);
         }
         this.unbind();
     }
@@ -231,6 +230,12 @@ export class GLMeshBuilder extends GLMeshBase {
     public end(mvp: mat4): void {
         this.program.bind();
         this.program.setMatrix4(GLProgram.MVPMatrix, mvp);
+
+        if (this.texture) {
+            this.texture.bind(0);
+            this.program.setTexture(GLProgram.Sampler, 0);
+        }
+
         this.bind();
         if (this._layout === EVertexLayout.INTERLEAVED) {
             let list: TypedArrayList<Float32Array> = this._lists[
@@ -297,6 +302,16 @@ export class GLMeshBuilder extends GLMeshBase {
                 list.subArray(),
                 this.gl.DYNAMIC_DRAW
             );
+            this.gl.enableVertexAttribArray(GLAttribState.POSITION_LOCATION);
+            this.gl.vertexAttribPointer(
+                GLAttribState.POSITION_LOCATION,
+                GLAttribState.POSITION_COMPONENT,
+                this.gl.FLOAT,
+                false,
+                0,
+                0
+            );
+
             if (this._hasTexcoord) {
                 buffer = this._buffers[GLAttribState.TEXCOORD_NAME];
                 list = this._lists[GLAttribState.TEXCOORD_NAME];
@@ -305,6 +320,17 @@ export class GLMeshBuilder extends GLMeshBase {
                     this.gl.ARRAY_BUFFER,
                     list.subArray(),
                     this.gl.DYNAMIC_DRAW
+                );
+                this.gl.enableVertexAttribArray(
+                    GLAttribState.TEXCOORD_LOCATION
+                );
+                this.gl.vertexAttribPointer(
+                    GLAttribState.TEXCOORD_LOCATION,
+                    GLAttribState.TEXCOORD_COMPONENT,
+                    this.gl.FLOAT,
+                    false,
+                    0,
+                    0
                 );
             }
             if (this._hasNormal) {
@@ -316,6 +342,15 @@ export class GLMeshBuilder extends GLMeshBase {
                     list.subArray(),
                     this.gl.DYNAMIC_DRAW
                 );
+                this.gl.enableVertexAttribArray(GLAttribState.NORMAL_LOCATION);
+                this.gl.vertexAttribPointer(
+                    GLAttribState.NORMAL_LOCATION,
+                    GLAttribState.NORMAL_COMPONENT,
+                    this.gl.FLOAT,
+                    false,
+                    0,
+                    0
+                );
             }
             if (this._hasColor) {
                 buffer = this._buffers[GLAttribState.COLOR_NAME];
@@ -325,6 +360,15 @@ export class GLMeshBuilder extends GLMeshBase {
                     this.gl.ARRAY_BUFFER,
                     list.subArray(),
                     this.gl.DYNAMIC_DRAW
+                );
+                this.gl.enableVertexAttribArray(GLAttribState.COLOR_LOCATION);
+                this.gl.vertexAttribPointer(
+                    GLAttribState.COLOR_LOCATION,
+                    GLAttribState.COLOR_COMPONENT,
+                    this.gl.FLOAT,
+                    false,
+                    0,
+                    0
                 );
             }
         }

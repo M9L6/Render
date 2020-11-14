@@ -1,5 +1,6 @@
 import mat4 from "../../../math/tsm/mat4";
 import { GLAttribBits, GLAttribState } from "./GLAttribState";
+import { GLTexture } from "./GLTexture";
 import {
     EShaderType,
     GLAttribMap,
@@ -53,7 +54,7 @@ export const GLShaderSource = {
         uniform sampler2D uSampler;
         varying vec2 vTexCoord;
         void main(){
-            gl_FragColor = texture2D(uSampler,vTexCoord);
+            gl_FragColor =  texture2D(uSampler,vTexCoord);
         }
         `,
     },
@@ -253,6 +254,15 @@ export class GLProgram {
         let loc: WebGLUniformLocation | null = this.getUniformLocation(name);
         if (loc) {
             this.gl.uniformMatrix4fv(loc, false, mat.Values);
+            return true;
+        }
+        return false;
+    }
+
+    public setTexture(name: string, unit: number): boolean {
+        let loc: WebGLUniformLocation | null = this.getUniformLocation(name);
+        if (loc) {
+            this.gl.uniform1i(loc, unit);
             return true;
         }
         return false;
