@@ -1,6 +1,8 @@
 import { Mat2D } from "./Mat2D";
 import { MatrixStack } from "./MatrixStack";
+import mat4 from "./tsm/mat4";
 import vec3 from "./tsm/vec3";
+import vec4 from "./tsm/vec4";
 import { Vec2 } from "./Vec2";
 
 export class Math2D {
@@ -43,6 +45,29 @@ export class Math2D {
 
     public static isEquals(a: number, b: number): boolean {
         return !(Math.abs(a - b) > Number.EPSILON);
+    }
+
+    public static obj2ScreenSpace(
+        pos: vec3,
+        mvp: mat4,
+        viewPort: Int32Array | Float32Array,
+        result: vec3
+    ): boolean {
+        let v: vec4 = new vec4([pos.x, pos.y, pos.z, 1.0]);
+        mvp.multiplyVec4(v, v);
+        if (v.w === 0) {
+            return false;
+        }
+        v.x /= v.w;
+        v.y /= v.w;
+        v.z /= v.w;
+        v.x = (v.x + 1) / 2;
+        v.y = (v.y + 1) / 2;
+
+        result.x = v.x * viewPort[2] + viewPort[0];
+        result.y = v.y * viewPort[3] + viewPort[1];
+        result.z = v.z;
+        return true;
     }
 
     public static projectPointOnLineSegment(

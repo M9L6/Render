@@ -1,5 +1,11 @@
 import vec3 from "../../../../math/tsm/vec3";
 
+export enum EAxisType {
+    XAXIS,
+    YAXIS,
+    ZAXIS,
+}
+
 export class GLCoordSystem {
     public static makeViewportCoordSystems(
         width: number,

@@ -9,14 +9,16 @@ export class CamerApplication extends WebGLApplication {
     public matStack: GLWorldMatrixStack;
     constructor(
         canvas: HTMLCanvasElement,
-        contextAttributes?: WebGLContextAttributes
+        contextAttributes?: WebGLContextAttributes,
+        need2D: boolean = false
     ) {
-        super(canvas, contextAttributes);
+        super(canvas, contextAttributes, need2D);
         this.camera = new Camera(
             this.gl as WebGLRenderingContext,
             this.canvas.width,
             this.canvas.height
         );
+        this.camera.z = 5;
         this.camera.lookAt(new vec3([0, 0, 0]));
         this.matStack = new GLWorldMatrixStack();
     }

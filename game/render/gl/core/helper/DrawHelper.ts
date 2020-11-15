@@ -181,4 +181,43 @@ export class DrawHelper {
         builder.texcoord(tc[46], tc[47]).vertex(halfLen, -halfLen, halfLen);
         builder.end(mat);
     }
+
+    public static drawFullCoordSystem(
+        builder: GLMeshBuilder,
+        mat: mat4,
+        len: number = 1,
+        rotateAxis: vec3 | null = null
+    ): void {
+        builder.gl.lineWidth(5);
+        builder.gl.disable(builder.gl.DEPTH_TEST);
+        builder.begin(builder.gl.LINES);
+
+        builder.color(1, 0, 0).vertex(0, 0, 0);
+        builder.color(1, 0, 0).vertex(len, 0, 0);
+
+        builder.color(1, 0, 0).vertex(0, 0, 0);
+        builder.color(1, 0, 0).vertex(-len, 0, 0);
+
+        builder.color(0, 1, 0).vertex(0, 0, 0);
+        builder.color(0, 1, 0).vertex(0, len, 0);
+
+        builder.color(0, 1, 0).vertex(0, 0, 0);
+        builder.color(0, 1, 0).vertex(0, -len, 0);
+
+        builder.color(0, 0, 1).vertex(0, 0, 0);
+        builder.color(0, 0, 1).vertex(0, 0, len);
+
+        builder.color(0, 0, 1).vertex(0, 0, 0);
+        builder.color(0, 0, 1).vertex(0, 0, -len);
+
+        if (rotateAxis !== null) {
+            let scale: vec3 = rotateAxis.scale(len);
+            builder.color(0, 0, 0).vertex(0, 0, 0);
+            builder.color(0, 0, 0).vertex(scale.x, scale.y, scale.z);
+        }
+
+        builder.end(mat);
+        builder.gl.lineWidth(1);
+        builder.gl.enable(builder.gl.DEPTH_TEST);
+    }
 }
